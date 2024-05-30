@@ -1,0 +1,123 @@
+<!-- app/reservation/templates/reservation.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約管理</title>
+    <link rel="stylesheet" href="{{ url_for('reservation.static', filename='css/style.css') }}">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> -->
+</head>
+<body>
+    <form method="POST" action="{{ url_for('reservation.reservations', id=id) }}" id="new_form">
+        <p>新規予約</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.checkin_date.label }} {{ form.checkin_date(id='new_checkin_date', class='date-input') }}</div>
+        <div>{{ form.checkout_date.label }} {{ form.checkout_date(id='new_checkout_date', class='date-input') }}</div>
+        <div>{{ form.customer_id.label }} {{ form.customer_id(id='new_customer_id') }}</div>
+        <div>{{ form.room_id.label }} {{ form.room_id(id='new_room_id') }} <button type="button" id="search_rooms_button">空室検索</button></div>
+        <div>{{ form.payment_type.label }} {{ form.payment_type(id='new_payment_type') }}</div>
+        <div>{{ form.payment_status.label }} {{ form.payment_status(id='new_payment_status') }}</div>
+        <div>{{ form.number_of_guests.label }} {{ form.number_of_guests(id='new_number_of_guests') }}</div>
+        <div>{{ form.status.label }} {{ form.status(id='new_status') }}</div>
+        <div><button type="submit">新規予約を追加する</button></div>
+    </form>
+
+    <form method="POST" action="{{ url_for('reservation.reservations', id=id) }}" id="edit_form">
+        <p>編集画面</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.checkin_date.label }} <input type="date" id="edit_checkin_date" name="checkin_date" class="date-input" value="{{ form.checkin_date.data }}"></div>
+        <div>{{ form.checkout_date.label }} <input type="date" id="edit_checkout_date" name="checkout_date" class="date-input" value="{{ form.checkout_date.data }}"></div>
+        <div>{{ form.customer_id.label }} {{ form.customer_id(id='edit_customer_id') }}</div>
+        <div>{{ form.room_id.label }} {{ form.room_id(id='edit_room_id') }} <button type="button" id="edit_search_rooms_button">空室検索</button></div>
+        <div>{{ form.payment_type.label }} {{ form.payment_type(id='edit_payment_type') }}</div>
+        <div>{{ form.payment_status.label }} {{ form.payment_status(id='edit_payment_status') }}</div>
+        <div>{{ form.number_of_guests.label }} {{ form.number_of_guests(id='edit_number_of_guests') }}</div>
+        <div>{{ form.status.label }} {{ form.status(id='edit_status') }}</div>
+        <div><button type="submit">更新内容を保存する</button></div>
+    </form>
+
+    <form action="{{ url_for('reservation.reservations') }}" method="get">
+        <input type="text" name="search_customer" placeholder="Search by customer..." id="sort">
+        <input type="text" name="search_room" placeholder="Search by room..." id="sort">
+        <select name="sort_order">
+            <option value="asc">昇順で表示</option>
+            <option value="desc">降順で表示</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+
+    <a href="{{ url_for('reservation.reservations', id=None) }}" class="button" id="new_button">新規登録</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>チェックイン</th>
+                <th>チェックアウト</th>
+                <th>顧客</th>
+                <th>部屋番号</th>
+                <th>支払いタイプ</th>
+                <th>支払いステータス</th>
+                <th>ゲスト数</th>
+                <th>予約ステータス</th>
+                <th class="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.checkin_date }}</td>
+                <td>{{ reservation.checkout_date }}</td>
+                <td>{{ reservation.customer.name }}</td>
+                <td>{{ reservation.room.room_number }}</td>
+                <td>{{ reservation.payment_type }}</td>
+                <td>{{ reservation.payment_status }}</td>
+                <td>{{ reservation.number_of_guests }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>
+                    <a href="{{ url_for('reservation.reservations', id=reservation.id) }}" class="edit-button" aria-label="予約を編集">編集</a>
+                    <form action="{{ url_for('reservation.delete_reservation', id=reservation.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="delete-button" onclick="return confirm('削除してよろしいですか？');" aria-label="予約を削除"><i class="fas fa-trash-alt"></i>キャンセル</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('reservation.reservations', page=pagination.prev_num, sort_order=sort_order) }}" class="page-link">＜</a>
+        {% else %}
+            <span class="page-link disabled">＜</span>
+        {% endif %}
+    
+        {% for p in range(pagination.page - 1, pagination.page + 2) %}
+            {% if p > 0 and p <= pagination.pages %}
+                {% if p == pagination.page %}
+                    <span class="page-number current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('reservation.reservations', page=p, sort_order=sort_order) }}" class="page-number">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+        {% if pagination.has_next %}
+            <a href="{{ url_for('reservation.reservations', page=pagination.next_num, sort_order=sort_order) }}" class="page-link">＞</a>
+        {% else %}
+            <span class="page-link disabled">＞</span>
+        {% endif %}
+    </div>
+
+<!-- JavaScriptファイルの読み込み -->
+<script>
+    const csrfToken = "{{ csrf_token() }}";  // CSRFトークンをJavaScript変数に保存
+</script>
+<script src="{{ url_for('reservation.static', filename='js/reservation.js') }}"></script>
+</body>
+</html>

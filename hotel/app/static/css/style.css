@@ -1,0 +1,91 @@
+/* app/static/css/style.css */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #717171;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ccc;
+}
+
+.logout-button {
+    background-color: #ff4b5c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e43d4d;
+}
+
+/* タブボタンのスタイル */
+.tab-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab-buttons button {
+    background-color: #4CAF50; /* 背景色 */
+    color: white; /* 文字色 */
+    padding: 14px 20px;
+    margin: 0 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.tab-buttons button:hover {
+    background-color: #45a049; /* ホバー時の背景色 */
+}
+
+.tab-buttons button.active {
+    background-color: #3e8e41; /* アクティブなタブの背景色 */
+    font-weight: bold;
+}
+
+/* タブコンテンツのスタイル */
+.tab-content {
+    display: none;
+    width: 100%;
+    height: 80vh;
+    border: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* flashメッセージのスタイル */
+.flash-messages {
+    margin: 20px 0;
+    padding: 10px;
+}
+
+.flash-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

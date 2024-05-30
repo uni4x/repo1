@@ -1,0 +1,214 @@
+<!-- app/customer/templates/customer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顧客管理画面</title>
+    <link rel="stylesheet" href="{{ url_for('customer.static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('customer.customers', id=id) }}" id="new_form">
+        <p>新規登録</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.name.label }} {{ form.name(id='new_name') }}</div>
+        <div>{{ form.address.label }} {{ form.address(id='new_address') }}</div>
+        <div>{{ form.phone.label }} {{ form.phone(id='new_phone') }}</div>
+        <div>{{ form.email.label }} {{ form.email(id='new_email') }}</div>
+        <div>{{ form.note.label }} {{ form.note(id='new_note') }}</div>
+        <div><button type="submit">新規登録する</button></div>
+    </form>
+
+    <form method="POST" action="{{ url_for('customer.customers', id=id) }}" id="edit_form">
+        <p>編集</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.name.label }} {{ form.name(id='edit_name') }}</div>
+        <div>{{ form.address.label }} {{ form.address(id='edit_address') }}</div>
+        <div>{{ form.phone.label }} {{ form.phone(id='edit_phone') }}</div>
+        <div>{{ form.email.label }} {{ form.email(id='edit_email') }}</div>
+        <div>{{ form.note.label }} {{ form.note(id='edit_note') }}</div>
+        <div><button type="submit">変更を保存する</button></div>
+    </form>
+
+    <form action="{{ url_for('customer.customers') }}" method="get">
+        <input type="text" name="search_name" placeholder="Search by name..." id="sort">
+        <select name="sort_order">
+            <option value="asc">昇順で表示</option>
+            <option value="desc">降順で表示</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+
+    <a href="{{ url_for('customer.customers', id=None) }}" class="button" id="new_button">新規登録</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名前</th>
+                <th>住所</th>
+                <th>電話番号</th>
+                <th>Email</th>
+                <th>Note</th>
+                <th class="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.note }}</td>
+                <td>
+                    <a href="{{ url_for('customer.customers', id=customer.id) }}" class="edit-button" aria-label="Edit Customer">編集</a>
+                    <form action="{{ url_for('customer.delete_customer', id=customer.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="delete-button" onclick="return confirm('削除してよろしいですか？');" aria-label="Delete Customer"><i class="fas fa-trash-alt"></i>削除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('customer.customers', page=pagination.prev_num, sort_order=sort_order) }}" class="page-link">＜</a>
+        {% else %}
+            <span class="page-link disabled">＜</span>
+        {% endif %}
+    
+        {% for p in range(pagination.page - 1, pagination.page + 2) %}
+            {% if p > 0 and p <= pagination.pages %}
+                {% if p == pagination.page %}
+                    <span class="page-number current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('customer.customers', page=p, sort_order=sort_order) }}" class="page-number">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+        {% if pagination.has_next %}
+            <a href="{{ url_for('customer.customers', page=pagination.next_num, sort_order=sort_order) }}" class="page-link">＞</a>
+        {% else %}
+            <span class="page-link disabled">＞</span>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide the new and edit forms initially
+            document.getElementById('new_form').style.display = 'none';
+            document.getElementById('edit_form').style.display = 'none';
+
+            // Show new customer form
+            document.querySelector('.button').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('new_form').style.display = 'flex';
+                document.getElementById('edit_form').style.display = 'none';
+            });
+
+            // Handle edit button click
+            document.querySelectorAll('a.edit-button').forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const baseUrl = this.getAttribute('href');
+                    const id = baseUrl.split('/')[baseUrl.split('/').length - 1];
+                    const urlWithMode = baseUrl + '?mode=json';
+
+                    fetch(urlWithMode)
+                        .then(response => response.json())
+                        .then(data => {
+                            const editForm = document.getElementById('edit_form');
+                            if (editForm) {
+                                document.getElementById('edit_name').value = data.name || '';
+                                document.getElementById('edit_address').value = data.address || '';
+                                document.getElementById('edit_phone').value = data.phone || '';
+                                document.getElementById('edit_email').value = data.email || '';
+                                document.getElementById('edit_note').value = data.note || '';
+
+                                editForm.action = baseUrl;
+                                editForm.style.display = 'flex';
+                                document.getElementById('new_form').style.display = 'none';
+                                history.pushState(null, null, baseUrl);
+                            }
+                        })
+                        .catch(error => console.error('Error loading the customer data:', error));
+                });
+            });
+
+            // Validation for the new form
+            document.getElementById('new_form').addEventListener('submit', function(event) {
+                if (!validateForm('new')) {
+                    event.preventDefault();
+                }
+            });
+
+            // Validation for the edit form
+            document.getElementById('edit_form').addEventListener('submit', function(event) {
+                if (!validateForm('edit')) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        function validateForm(formType) {
+            let isValid = true;
+            const name = document.getElementById(formType + '_name').value;
+            const email = document.getElementById(formType + '_email').value;
+            const phone = document.getElementById(formType + '_phone').value;
+
+            // Name validation
+            if (name.trim() === '') {
+                alert('名前は必項です。');
+                isValid = false;
+            }
+
+            // Email validation
+            if (email.trim() === '') {
+                alert('メールアドレスは必項です。');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                alert('メールアドレスの形式が不正です。');
+                isValid = false;
+            }
+
+            // Phone validation (example: must be 10 digits)
+            if (phone.trim() !== '' && !validatePhone(phone)) {
+                alert('電話番号は、8桁以上11桁以下で入力してください。');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(email);
+        }
+
+        function validatePhone(phone) {
+            const re = /^\d{8,12}$/;
+            return re.test(phone);
+        }
+    </script>
+
+</body>
+</html>

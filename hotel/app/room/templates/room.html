@@ -1,0 +1,182 @@
+<!-- app/room/templates/room.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部屋管理</title>
+    <link rel="stylesheet" href="{{ url_for('room.static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('room.rooms', id=id) }}" id="new_form" required>
+        <p>新規登録</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.room_number.label }} {{ form.room_number(id='new_room_number') }}
+        </div>
+        <div>
+            {{ form.room_type_id.label }} {{ form.room_type_id(id='new_room_type_id') }}
+        </div>
+        <div>
+            {{ form.price.label }} {{ form.price(id='new_price') }}
+        </div>
+        <div>
+            {{ form.status.label }} {{ form.status(id='new_status') }}
+        </div>
+        <div>
+            <button type="submit">作成する</button>
+        </div>
+    </form>
+
+    <form method="POST" action="{{ url_for('room.rooms', id=id) }}" id="edit_form">
+        <p>編集画面</p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.room_number.label }} {{ form.room_number(id='edit_room_number') }}
+        </div>
+        <div>
+            {{ form.room_type_id.label }} {{ form.room_type_id(id='edit_room_type_id') }}
+        </div>
+        <div>
+            {{ form.price.label }} {{ form.price(id='edit_price') }}
+        </div>
+        <div>
+            {{ form.status.label }} {{ form.status(id='edit_status') }}
+        </div>
+        <div>
+            <button type="submit">更新内容を保存する</button>
+        </div>
+    </form>
+
+    <!-- フィルタリング、ソート -->
+    <form action="{{ url_for('room.rooms') }}" method="get">
+        <input type="text" name="search_room_number" placeholder="Search by room number..." id="sort">
+        <select name="search_status" id="sort">
+            <option value="">ステータスで検索</option>
+            <option value="available">Available</option>
+            <option value="reserved">Reserved</option>
+            <option value="occupied">Occupied</option>
+            <option value="maintenance">Maintenance</option>
+            <option value="cleaning">Cleaning</option>
+        </select>
+        <select name="sort_order">
+            <option value="asc">昇順で表示</option>
+            <option value="desc">降順で表示</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+
+    <a href="{{ url_for('room.rooms', id=None) }}" class="button" id="new_button">新規登録</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>部屋番号</th>
+                <th>部屋タイプ</th>
+                <th>価格</th>
+                <th>ステータス</th>
+                <th class="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room.id }}</td>
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.room_type.type_name }}</td>
+                <td>{{ room.price }}</td>
+                <td>{{ room.status }}</td>
+                <td>
+                    <a href="{{ url_for('room.rooms', id=room.id) }}" class="edit-button" aria-label="部屋を編集">編集</a>
+                    <form action="{{ url_for('room.delete_room', id=room.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="delete-button" onclick="return confirm('削除してよろしいですか？');" aria-label="部屋を削除"><i class="fas fa-trash-alt"></i>削除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('room.rooms', page=pagination.prev_num, sort_order=sort_order) }}" class="page-link">＜</a>
+        {% else %}
+            <span class="page-link disabled">＜</span>
+        {% endif %}
+    
+        {% for p in range(pagination.page - 1, pagination.page + 2) %}
+            {% if p > 0 and p <= pagination.pages %}
+                {% if p == pagination.page %}
+                    <span class="page-number current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('room.rooms', page=p, sort_order=sort_order) }}" class="page-number">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+        {% if pagination.has_next %}
+            <a href="{{ url_for('room.rooms', page=pagination.next_num, sort_order=sort_order) }}" class="page-link">＞</a>
+        {% else %}
+            <span class="page-link disabled">＞</span>
+        {% endif %}
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('new_form').style.display = 'none';
+        document.getElementById('edit_form').style.display = 'none';
+
+        document.querySelector('.button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('new_form').style.display = 'flex';
+            document.getElementById('edit_form').style.display = 'none';
+        });
+    });
+
+    document.querySelectorAll('a.edit-button').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const baseUrl = this.getAttribute('href');
+            const id = baseUrl.split('/')[baseUrl.split('/').length - 1];
+            const urlWithMode = baseUrl + '?mode=json';
+
+            fetch(urlWithMode)
+                .then(response => response.json())
+                .then(data => {
+
+                    const editForm = document.getElementById('edit_form');
+                    if (editForm) {
+                        document.getElementById('edit_room_number').value = data.room_number || '';
+                        document.getElementById('edit_room_type_id').value = data.room_type_id || '';
+                        document.getElementById('edit_price').value = data.price || '';
+                        document.getElementById('edit_status').value = data.status || '';
+
+                        editForm.action = baseUrl;
+                        editForm.style.display = 'flex';
+                        document.getElementById('new_form').style.display = 'none';
+                        history.pushState(null, null, baseUrl);
+                    }
+                })
+                .catch(error => console.error('Error loading the room data:', error));
+        });
+    });
+</script>
+    
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!-- app/main/templates/csrf_error.html -->
+{% extends 'base.html' %}
+
+{% block title %}エラー{% endblock %}
+
+{% block content %}
+
+    <h1>リクエストエラー</h1>
+    <p>{{ reason }}</p>
+    <p>セッションが切れている可能性があります。もう一度やり直してください。</p>
+    <a href="{{ url_for('main.search.search') }}">トップページに戻る</a>
+
+{% endblock %}

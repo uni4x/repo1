@@ -1,0 +1,31 @@
+<!-- app/main/templates/confirmation.html -->
+{% extends 'base.html' %}
+
+{% block title %}ご入力情報確認{% endblock %}
+
+{% block content %}
+<img src="{{ url_for('main.static', filename='images/logo.png') }}" alt="Logo" class="logo_img">
+    <p class="text-center">ご入力情報確認</p>
+        <div class="container_info2">
+            <p>お部屋番号: {{ room.room_number }} - {{ room.room_type.type_name }}</p>
+            <p>お客様氏名: {{ customer_info['name'] }} 様</p>
+            <p>ご住所: {{ customer_info['address'] }}</p>
+            <p>お電話番号: {{ customer_info['phone'] }}</p>
+            <p>Email: {{ customer_info['email'] }}</p>
+            <p>ご宿泊ご予定人数: {{ customer_info['number_of_guests'] }} 人</p>
+            <p>チェックイン: {{ checkin_date }}</p>
+            <p>チェックアウト: {{ checkout_date }}</p>
+            <p>料金: {{ room.price | int }}円</p>
+            <p>お支払い方法: {{ payment_type }}</p>
+            <p>備考: {{ note }}</p>
+            <p class="confirmation_text">上記の内容で予約しますか？</p>
+        </div>
+            <div class="button-container">
+                <form method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(class_="btn btn-primary") }}
+                </form>
+                <a href="{{ url_for('main.customer_info.customer_info', room_id=room_id) }}" class="btn btn-back">前のページに戻る</a>
+            </div>
+        
+{% endblock %}

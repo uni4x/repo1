@@ -1,0 +1,149 @@
+<!-- app/roomtype/templates/room_type.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部屋タイプ管理画面</title>
+    <link rel="stylesheet" href="{{ url_for('roomtype.static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- 新規登録フォーム -->
+    <form method="post" action="{{ url_for('roomtype.room_types') }}" id="new_form">
+        <p>新規登録</p>
+        {{ form.hidden_tag() }}
+        <input type="text" id="type_name" name="type_name" placeholder="部屋タイプ名を入力" required>
+        <textarea id="description" name="description" placeholder="詳細を入力してください" required></textarea>
+        <br>
+        <button type="submit">作成する</button>
+    </form>
+
+    <!-- 編集フォーム -->
+    <form method="post" action="{{ url_for('roomtype.room_types', id=id) }}" id="edit_form">
+        <p>編集画面</p>
+        {{ form.hidden_tag() }}
+        <input type="text" id="type_name2" name="type_name2" value="{{ form.type_name.data }}" required>
+        <textarea id="description2" name="description2" required>{{ form.description.data }}</textarea>
+        <button type="submit">更新内容を保存する</button>
+    </form>
+
+    <!-- フィルタリング、ソート -->
+    <form action="{{ url_for('roomtype.room_types') }}" method="get">
+        <input type="text" name="search_type" placeholder="Search by type name..." id="sort">
+        <input type="text" name="search_description" placeholder="Search by description..." id="sort">
+        <select name="sort_order">
+            <option value="asc">昇順で表示</option>
+            <option value="desc">降順で表示</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+
+    <a href="{{ url_for('roomtype.room_types', id=None) }}" class="button" id="new_button">新規登録</a>
+   
+    <table>
+        <thead>
+            <tr>
+                <th>部屋タイプ</th>
+                <th>詳細</th>
+                <th class="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for room_type in room_types %}
+           <tr>
+               <td>{{ room_type.type_name }}</td>
+               <td>{{ room_type.description }}</td>
+               <td class="center">
+                   <a href="{{ url_for('roomtype.room_types', id=room_type.id) }}" class="edit-button" aria-label="部屋タイプを編集">編集</a>
+                   <form action="{{ url_for('roomtype.delete_room_type', id=room_type.id) }}" method="post" style="display: inline;">
+                       {{ form.hidden_tag() }}
+                       <button type="submit" class="delete-button" onclick="return confirm('削除してよろしいですか？');" aria-label="部屋タイプを削除"><i class="fas fa-trash-alt"></i>削除</button>
+                   </form>
+               </td>
+           </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        <!-- 前のページへのリンク -->
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('roomtype.room_types', page=pagination.prev_num, sort_order=sort_order) }}" class="page-link">＜</a>
+        {% else %}
+            <span class="page-link disabled">＜</span>
+        {% endif %}
+    
+        <!-- ページ番号 -->
+        {% for p in range(pagination.page - 1, pagination.page + 2) %}
+            {% if p > 0 and p <= pagination.pages %}
+                {% if p == pagination.page %}
+                    <span class="page-number current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('roomtype.room_types', page=p, sort_order=sort_order) }}" class="page-number">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+        <!-- 次のページへのリンク -->
+        {% if pagination.has_next %}
+            <a href="{{ url_for('roomtype.room_types', page=pagination.next_num, sort_order=sort_order) }}" class="page-link">＞</a>
+        {% else %}
+            <span class="page-link disabled">＞</span>
+        {% endif %}
+    </div>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 新規登録フォームと編集フォームを隠す
+        document.getElementById('new_form').style.display = 'none';
+        document.getElementById('edit_form').style.display = 'none';
+
+        // 新規登録ボタンのイベントハンドラ
+        document.querySelector('.button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('new_form').style.display = 'flex';
+            document.getElementById('edit_form').style.display = 'none';
+        });
+    });
+
+    // 編集
+    document.querySelectorAll('a.edit-button').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const baseUrl = this.getAttribute('href');
+            const id = baseUrl.split('/')[baseUrl.split('/').length - 1];
+            console.log(baseUrl);
+            const urlWithMode = baseUrl + '?mode=json';
+
+            fetch(urlWithMode)
+                .then(response => response.json())
+                .then(data => {
+                    const editForm = document.getElementById('edit_form');
+                    if (editForm) {
+                        document.getElementById('type_name2').value = data.type_name || '';
+                        document.getElementById('description2').value = data.description || '';
+                        editForm.action = baseUrl;
+                        editForm.style.display = 'flex';
+                        document.getElementById('new_form').style.display = 'none';
+                        history.pushState(null, null, baseUrl);
+                    }
+                })
+                .catch(error => console.error('Error loading the room type data:', error));
+        });
+    });
+</script>
+    
+</body>
+</html>

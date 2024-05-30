@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>従業員管理画面</title>
+    <link rel="stylesheet" href="{{ url_for('employee.static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- app/employee/templates/employee.html -->
+</head>
+<body>
+    <!-- <h2>従業員管理画面</h2> -->
+    
+    <!-- 新規登録フォーム -->
+    <form method="post" action="{{ url_for('employee.employees') }}" id="new_form">
+        <p>新規登録</p>
+        {{ form.hidden_tag() }}
+        <input type="text" id="name" name="name" placeholder="従業員名を入力" required>
+        <textarea id="description" name="description" placeholder="詳細を入力してください" required></textarea>
+        <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+        <label><input type="checkbox" id="togglePassword"> パスワードを表示</label>
+        <br>
+        <button type="submit">作成する</button>
+    </form>
+
+    <!-- 編集フォーム -->
+    <form method="post" action="{{ url_for('employee.employees', id=id) }}" id="edit_form">
+        <p>編集画面</p>
+        {{ form.hidden_tag() }}
+        <input type="text" id="name2" name="name2" value="{{ form.name.data }}" required>
+        <textarea id="description2" name="description2" required>{{ form.description.data }}</textarea>
+        <input type="password" id="password2" name="password2" placeholder="新しいパスワードを入力">
+        <label><input type="checkbox" id="togglePassword2"> パスワードを表示</label>
+        <button type="submit">更新内容を保存する</button>
+    </form>
+
+    <!-- フィルタリング、ソート -->
+    <form action="{{ url_for('employee.employees') }}" method="get">
+        <input type="text" name="search_name" placeholder="従業員名で検索..." id="sort">
+        <input type="text" name="search_description" placeholder="詳細で検索..." id="sort">
+        <select name="sort_order">
+            <option value="asc">昇順で表示</option>
+            <option value="desc">降順で表示</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+
+    <a href="{{ url_for('employee.employees', id=None) }}" class="button" id="new_button">新規登録</a>
+   
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>従業員名</th>
+                <th>詳細</th>
+                <th>登録日</th>
+                <th>管理者</th>
+                <th class="center">編集</th>
+                <th class="center">削除</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for employee in employees %}
+           <tr>
+               <td>{{ employee.id }}</td>
+               <td>{{ employee.name }}</td>
+               <td>{{ employee.description }}</td>
+               <td>{{ employee.created_at.strftime('%Y-%m-%d') }}</td>
+               <td>{{ '管理者' if employee.is_admin else '従業員' }}</td>
+               <td class="center">
+                   <a href="{{ url_for('employee.employees', id=employee.id) }}" class="edit-button" aria-label="従業員を編集">編集</a>
+               </td>
+               <td class="center">
+                <form action="{{ url_for('employee.delete_employee', id=employee.id) }}" method="post" style="display: inline;">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="delete-button" onclick="return confirm('削除してよろしいですか？');" aria-label="従業員を削除"><i class="fas fa-trash-alt"></i>削除</button>
+                </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        <!-- 前のページへのリンク -->
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('employee.employees', page=pagination.prev_num, sort_order=sort_order) }}" class="page-link">＜</a>
+        {% else %}
+            <span class="page-link disabled">＜</span>
+        {% endif %}
+    
+        <!-- ページ番号 -->
+        {% for p in range(pagination.page - 1, pagination.page + 2) %}
+            {% if p > 0 and p <= pagination.pages %}
+                {% if p == pagination.page %}
+                    <span class="page-number current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('employee.employees', page=p, sort_order=sort_order) }}" class="page-number">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+        <!-- 次のページへのリンク -->
+        {% if pagination.has_next %}
+            <a href="{{ url_for('employee.employees', page=pagination.next_num, sort_order=sort_order) }}" class="page-link">＞</a>
+        {% else %}
+            <span class="page-link disabled">＞</span>
+        {% endif %}
+    </div>
+
+    <script>
+        function generateRandomPassword(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+            return password;
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            // 新規登録フォームと編集フォームを隠す
+            document.getElementById('new_form').style.display = 'none';
+            document.getElementById('edit_form').style.display = 'none';
+    
+            // 新規登録ボタンのイベントハンドラ
+            document.querySelector('.button').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('new_form').style.display = 'flex';
+                document.getElementById('edit_form').style.display = 'none';
+                // 新規登録フォームにランダムパスワードをセット
+                document.getElementById('password').value = generateRandomPassword(8);
+            });
+    
+            // パスワード表示切り替え
+            document.getElementById('togglePassword').addEventListener('change', function() {
+                const passwordField = document.getElementById('password');
+                passwordField.type = this.checked ? 'text' : 'password';
+            });
+    
+            document.getElementById('togglePassword2').addEventListener('change', function() {
+                const passwordField = document.getElementById('password2');
+                passwordField.type = this.checked ? 'text' : 'password';
+            });
+        });
+    
+        // 編集
+        document.querySelectorAll('a.edit-button').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const baseUrl = this.getAttribute('href');
+                const id = baseUrl.split('/')[baseUrl.split('/').length - 1];
+                const urlWithMode = baseUrl + '?mode=json';
+    
+                fetch(urlWithMode)
+                    .then(response => response.json())
+                    .then(data => {
+                        const editForm = document.getElementById('edit_form');
+                        if (editForm) {
+                            document.getElementById('name2').value = data.name || '';
+                            document.getElementById('description2').value = data.description || '';
+                            editForm.action = baseUrl;
+                            editForm.style.display = 'flex';
+                            document.getElementById('new_form').style.display = 'none';
+                            history.pushState(null, null, baseUrl);
+                        }
+                    })
+                    .catch(error => console.error('Error loading the employee data:', error));
+            });
+        });
+    </script>
+    

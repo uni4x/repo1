@@ -1,0 +1,26 @@
+<!-- app/main/templates/reservation.html -->
+{% extends 'base.html' %}
+
+{% block title %}予約確認{% endblock %}
+
+{% block content %}
+<div class="container_about">
+    <img src="{{ url_for('main.static', filename='images/logo.png') }}" alt="Logo" class="logo_img">
+    <p class="text-center">以下の内容でご予約しますか？</p>
+    <div class="reservation_top_info">
+        <p>部屋番号: {{ room.room_number }}</p>
+        <p>部屋タイプ: {{ room.room_type.type_name }}</p>
+        <p>料金: {{ room.price | int }}円</p>
+        <p>チェックイン日: {{ checkin_date }}</p>
+        <p>チェックアウト日: {{ checkout_date }}</p>
+    </div>  
+    <div class="button-container">
+        <form method="post" style="display: inline;">
+            {{ form.hidden_tag() }}
+            {{ form.submit(class_="btn btn-2") }}
+        </form>
+        <a href="{{ url_for('main.search.search') }}" class="btn btn-back">トップページに戻る</a>
+    </div>
+    
+</div>
+{% endblock %}

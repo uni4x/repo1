@@ -1,0 +1,299 @@
+/* app/main/static/css/style.css */
+.errors {
+    color: red;
+    font-size: 0.9em;
+}
+
+form div {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo_img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+    font-size: 24px;
+}
+
+.hamburger-menu {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+nav {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ffffff;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #495057;
+}
+
+.container {
+    max-width: 800px;
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.container_about {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.container_search {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* お客様情報入力 */
+.container_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container_info form {
+    width: 100%;
+    max-width: 600px; /* フォームの最大幅を設定 */
+    margin: 0 auto; /* フォームを中央揃え */
+}
+
+.form-group2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.form-group2 label, .form-group2 input, .form-group2 select, .form-group2 textarea {
+    width: 100%;
+    max-width: 500px; /* 各入力要素の最大幅を設定 */
+}
+
+.customer_info_date {
+    margin: 30px auto;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+/* ここまで */
+
+/* 確認ページ２ */
+.container_info2 {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    text-align: left;
+    font-size: 16px;
+    margin-left: 30%;
+}
+
+.confirmation_text {
+    margin-top: 30px;
+}
+
+/* 確認ページ１ */
+.reservation_top_info {
+    margin-left: 30%;
+}
+/* ここまで */
+
+.icon_img {
+    width: 40px;
+    height: 30px;
+    margin: 0 auto;
+    display: block;
+}
+
+h1, h2, h3 {
+    color: #333333;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    line-height: 1.6;
+    color: #555555;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 50%;
+    text-align: center;
+}
+
+
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555555;
+}
+
+input[type="date"], .form-control {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.errors {
+    color: red;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #000000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #464646;
+    padding: 10px 100px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    padding: 10px 70px;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    padding: 10px 100px;
+}
+
+.btn-2 {
+    background-color: #464646;
+    padding: 10px 100px;
+}
+
+.btn:hover {
+    background-color: #868686;
+}
+
+/* 確認ページのボタン */
+.button-container {
+    text-align: center; /* 中央揃え */
+    margin-top: 20px; /* 必要に応じて上のマージンを調整 */
+}
+
+.button-container .btn {
+    margin: 10px 10px; /* ボタン間のスペースを調整 */
+}
+/* ここまで */
+
+
+.room-list {
+    list-style: none;
+    padding: 0;
+}
+
+.room-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.details-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.details-link:hover {
+    text-decoration: underline;
+}
+
+/* 検索フォーム */
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group-inline label {
+    margin-right: 10px;
+    min-width: 100px;
+    text-align: right;
+    width: 70%;
+}
+
+.form-group-inline input[type="date"] {
+    flex-grow: 1;
+}
+
+#submit_btn1 {
+    margin: 0 auto;
+    padding-top: 20px;
+}
+

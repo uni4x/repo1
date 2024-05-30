@@ -1,0 +1,94 @@
+<!-- app/main/templates/customer_info.html -->
+{% extends 'base.html' %}
+
+{% block title %}お客様情報入力{% endblock %}
+{% block content %}
+<div class="container_info">
+    <img src="{{ url_for('main.static', filename='images/logo.png') }}" alt="Logo" class="logo_img">
+    <p class="text-center">お客様情報のご入力</p>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group2">
+            {{ form.name.label }} {{ form.name(class_="form-control") }}
+            {% if form.name.errors %}
+                <ul class="errors">
+                    {% for error in form.name.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.address.label }} {{ form.address(class_="form-control") }}
+            {% if form.address.errors %}
+                <ul class="errors">
+                    {% for error in form.address.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.phone.label }} {{ form.phone(class_="form-control") }}
+            {% if form.phone.errors %}
+                <ul class="errors">
+                    {% for error in form.phone.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.email.label }} {{ form.email(class_="form-control") }}
+            {% if form.email.errors %}
+                <ul class="errors">
+                    {% for error in form.email.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.number_of_guests.label }} {{ form.number_of_guests(class_="form-control") }}
+            {% if form.number_of_guests.errors %}
+                <ul class="errors">
+                    {% for error in form.number_of_guests.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.note.label }} {{ form.note(class_="form-control") }}
+            {% if form.note.errors %}
+                <ul class="errors">
+                    {% for error in form.note.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group2">
+            {{ form.payment_type.label }} {{ form.payment_type(class_="form-control") }}
+            {% if form.payment_type.errors %}
+                <ul class="errors">
+                    {% for error in form.payment_type.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="customer_info_date">
+            <p>チェックイン: {{ checkin_date }}</p>
+            <p>チェックアウト: {{ checkout_date }}</p>
+        </div>
+        <div class="form-group2">
+            {{ form.submit(class_="btn btn-primary") }}
+        </div>
+        
+        <div class="button-container">
+            <a href="{{ url_for('main.reserve.reserve', room_id=room_id) }}" class="btn btn-back">前のページに戻る</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

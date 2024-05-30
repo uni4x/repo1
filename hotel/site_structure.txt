@@ -1,0 +1,113 @@
+.
+├── Dockerfile
+├── app
+│   ├── __init__.py # 初期化、Blueprint登録
+│   ├── auth # 従業員ログイン
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   └── css
+│   │   └── templates
+│   │       └── login.html
+│   ├── customer # 顧客管理画面
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   └── css
+│   │   └── templates
+│   │       └── customer.html
+│   ├── employee # 従業員管理画面
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   └── css
+│   │   └── templates
+│   │       └── employees.html
+│   ├── error_handlers.py
+│   ├── main # ホテル予約サイトトップ画面　顧客側
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes
+│   │   │   ├── __init__.py
+│   │   │   ├── confirmation.py
+│   │   │   ├── customer_info.py
+│   │   │   ├── error_handlers.py
+│   │   │   ├── reserve.py
+│   │   │   ├── search.py
+│   │   │   └── thank_you.py
+│   │   ├── static
+│   │   │   ├── css
+│   │   │   └── images
+│   │   └── templates
+│   │       ├── base.html # テンプレート
+│   │       ├── confirmation.html
+│   │       ├── csrf_error.html
+│   │       ├── customer_info.html
+│   │       ├── header.html
+│   │       ├── reservation_top.html
+│   │       ├── search.html # トップ画面　空室検索
+│   │       └── thank_you.html
+│   ├── models.py
+│   ├── reservation # 予約管理画面
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   ├── css
+│   │   │   └── js
+│   │   └── templates
+│   │       └── reservation.html
+│   ├── room # 部屋管理画面
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   └── css
+│   │   └── templates
+│   │       └── room.html
+│   ├── roomtype # 部屋タイプ管理画面
+│   │   ├── __init__.py
+│   │   ├── forms.py
+│   │   ├── routes.py
+│   │   ├── static
+│   │   │   └── css
+│   │   └── templates
+│   │       └── room_type.html
+│   ├── routes.py
+│   ├── static
+│   │   └── css
+│   │       └── style.css
+│   └── templates
+│       ├── 500.html
+│       ├── admin_dashboard.html
+│       └── error.html
+├── config.py # 設定ファイル
+├── create_admin.py # 管理者ユーザー作成
+├── docker-compose.yml # Docker Composeファイル
+├── initialize_db.py # データベース初期化
+├── instance
+│   ├── app.db
+│   ├── development.db
+│   └── testing.db
+├── logs
+│   └── app.log
+├── migrations
+├── pytest.ini
+├── requirements.txt
+├── run.py
+├── site_structure.txt
+└── tests # pytest
+    ├── __init__.py
+    ├── conftest.py
+    ├── test_auth.py
+    ├── test_forms.py
+    ├── test_models.py
+    └── test_routes.py
+.env # 環境変数
+.github # Github Actions
+
+
+

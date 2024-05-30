@@ -1,0 +1,88 @@
+<!-- app/main/templates/search.html -->
+{% extends 'base.html' %}
+
+{% block title %}空室検索{% endblock %}
+
+{% block content %}
+<div class="container_about">
+    <section id="about">
+        <img src="{{ url_for('main.static', filename='images/logo.png') }}" alt="Logo" class="logo_img">
+        <p class="text-center">ようこそ Bibliotelへ</p>
+        <p>
+            当ホテルBibliotel は、本を愛する人々のためのユニークな隠れ家です。静かな環境に包まれた当ホテルは、読書の喜びを大切にする方々のためにデザインされています。ホテルの各コーナーには、多種多様な文学作品が並ぶ本棚が配置されており、古典文学から現代小説、ノンフィクションまで、あなたの想像力をかき立てる本がきっと見つかります。<br>
+            プライベートルームの静けさを楽しむもよし、ホテル内の居心地の良い読書スペースでリラックスするもよし。 Bibliotel では、物語の力があなたを異なる世界へと運び、日常の喧騒から本当の意味で逃避できると信じています。
+        </p>
+        
+    </section>
+</div>
+<img src="{{ url_for('main.static', filename='images/icon.png') }}" alt="icon_book" class="icon_img">
+<!-- <h1>空室検索</h1> -->
+<div class="container_search">
+<form method="post" onsubmit="return validateDates();">
+    {{ form.hidden_tag() }}
+    <div class="form-group-inline">
+        {{ form.checkin_date.label }} <input type="date" id="checkin_date" name="checkin_date" required>
+    </div>
+    <div class="form-group-inline">
+        {{ form.checkout_date.label }} <input type="date" id="checkout_date" name="checkout_date" required>
+    </div>
+    <div class="form-group" id="submit_btn1">
+        {{ form.submit(class_="btn btn-primary") }}
+    </div>
+</form>
+</div>
+
+{% if available_rooms %}
+    <h2>Available Rooms</h2>
+    <ul class="room-list">
+        {% for room in available_rooms %}
+            <li>
+                <div class="room-info">
+                    <span>Room {{ room.room_number }}</span> - <span>{{ room.room_type.type_name }}</span> - <span>￥{{ room.price | int }}</span>
+                    <a class="details-link" href="{{ url_for('main.reserve.reserve', room_id=room.id, checkin_date=form.checkin_date.data, checkout_date=form.checkout_date.data) }}">詳細</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<script>
+    function checkSession() {
+        fetch('{{ url_for("main.search.search") }}', { method: 'HEAD', cache: 'no-store' })
+        .then(response => {
+            if (!response.ok) {
+                alert('セッションが切れています。ページを再読み込みしてください。');
+                location.reload();
+            }
+        })
+        .catch(() => {
+            alert('セッションが切れています。ページを再読み込みしてください。');
+            location.reload();
+        });
+    }
+
+    window.onload = function() {
+        let today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkin_date').setAttribute('min', today);
+        document.getElementById('checkout_date').setAttribute('min', today);
+    };
+
+    function validateDates() {
+        let checkin_date = document.getElementById('checkin_date').value;
+        let checkout_date = document.getElementById('checkout_date').value;
+
+        if (checkout_date < checkin_date) {
+            alert('チェックアウト日はチェックイン日より後の日付を選択してください。');
+            return false;
+        }
+
+        return true;
+    }
+
+    function toggleMenu() {
+        let menu = document.getElementById('menu');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+</script>
+{% endblock %}
+

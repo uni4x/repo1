@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=your_secret_key
+      - DEV_DATABASE_URL=sqlite:///development.db
+    working_dir: /app
+    command: >
+      sh -c "python initialize_db.py && python run.py"
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: hotel_booking
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
