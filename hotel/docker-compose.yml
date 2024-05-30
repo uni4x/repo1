@@ -10,17 +10,17 @@ services:
     environment:
       - FLASK_ENV=development
       - SECRET_KEY=your_secret_key
-      - DEV_DATABASE_URL=sqlite:///development.db
+      - DEV_DATABASE_URL=postgresql://root:root@db:5432/hotel_booking
     working_dir: /app
-    command: >
-      sh -c "python initialize_db.py && python run.py"
+    depends_on:
+      - db
 
   db:
     image: postgres:13
     environment:
       POSTGRES_DB: hotel_booking
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
