@@ -12,7 +12,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URL', 'postgresql://root:root@localhost/dev_hotel')
-    SQLALCHEMY_ECHO = True  # 追加
+    SQLALCHEMY_ECHO = True
 
 # 本番用
 class ProductionConfig(Config):
@@ -28,6 +28,6 @@ class TestingConfig(Config):
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
-    'testing': TestingConfig,  # 追加
+    'testing': TestingConfig,
     'default': DevelopmentConfig
 }
