@@ -1,15 +1,27 @@
-# ベースイメージとしてPythonを使用
+# ベースイメージの指定
 FROM python:3.9-slim
 
-# 作業ディレクトリを設定
+# 必要なシステムパッケージのインストール
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 作業ディレクトリの設定
 WORKDIR /app
 
-# 依存関係ファイルをコピーし、必要なパッケージをインストール
+# 必要なライブラリのインストール
+RUN pip install --upgrade pip
+
+# requirements.txt をコンテナにコピーし、依存関係をインストール
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# アプリケーションのソースコードをコピー
+# アプリケーションのコードをコンテナにコピー
 COPY . .
 
-# アプリケーションを起動する
-CMD ["python", "run.py"]
+# wait-for-it.shスクリプトをコンテナにコピー
+COPY wait-for-it.sh /wait-for-it.sh
+
+# コンテナの起動コマンド
+CMD ["/wait-for-it.sh", "db:5432", "--", "sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
