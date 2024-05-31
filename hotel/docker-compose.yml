@@ -13,10 +13,11 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
+    env_file:
+      - .env
     environment:
       - FLASK_ENV=development
-      - SECRET_KEY=your_secret_key
-      - DEV_DATABASE_URL=postgresql://root:root@db:5432/dev_hotel
+      - DEV_DATABASE_URL=${DEV_DATABASE_URL}
     working_dir: /app
     depends_on:
       - db
