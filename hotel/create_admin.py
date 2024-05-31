@@ -1,3 +1,5 @@
+# hotel/create_admin.py
+
 from app import create_app, db
 from app.models import Employee
 from werkzeug.security import generate_password_hash
