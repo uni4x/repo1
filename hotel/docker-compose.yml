@@ -1,8 +1,14 @@
 version: '3.8'
 
+networks:
+  my_network:
+    driver: bridge
+
 services:
   web:
     build: .
+    networks:
+      - my_network
     ports:
       - "5000:5000"
     volumes:
@@ -14,10 +20,12 @@ services:
     working_dir: /app
     depends_on:
       - db
-    entrypoint: ["/wait-for-it.sh", "db:5432", "--timeout=30", "--", "sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
+    entrypoint: ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
 
   db:
     image: postgres:13
+    networks:
+      - my_network
     environment:
       POSTGRES_DB: dev_hotel
       POSTGRES_USER: root
