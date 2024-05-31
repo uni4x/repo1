@@ -24,4 +24,6 @@ COPY . .
 COPY wait-for-it.sh /wait-for-it.sh
 
 # コンテナの起動コマンド
-CMD ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
+# CMD ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
+
+CMD ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
