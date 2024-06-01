@@ -13,7 +13,7 @@ services:
       - .env
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=postgresql://root:root@db:5432/dev_hotel
+      - DEV_DATABASE_URL=postgresql://root:root@db:5432/dev_hotel
     working_dir: /app
     depends_on:
       - db
