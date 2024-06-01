@@ -17,7 +17,7 @@ services:
     working_dir: /app
     depends_on:
       - db
-    entrypoint: ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
+    entrypoint: ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "hotel.run:app"]
 
   db:
     image: postgres:13
