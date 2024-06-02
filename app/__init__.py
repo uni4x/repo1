@@ -21,11 +21,11 @@ csrf = CSRFProtect()
 migrate = Migrate()
 login_manager = LoginManager()
 
-def create_app(config_name='default'):
+def create_app(config_name='development'):
     app = Flask(__name__)  # インスタンス作成
 
     # 環境変数FLASK_CONFIGから設定を読み込み
-    config_name = config_name or os.getenv('FLASK_CONFIG') or 'default'
+    config_name = config_name or os.getenv('FLASK_CONFIG') or 'development'
     app.config.from_object(config[config_name])
 
     db.init_app(app)
