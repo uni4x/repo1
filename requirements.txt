@@ -44,11 +44,13 @@ PyYAML==6.0.1
 reportlab==4.2.0
 requests==2.32.2
 setuptools==70.0.0
-SQLAlchemy==2.0.30
 typing_extensions==4.11.0
 urllib3==2.2.1
 virtualenv==20.26.2
 Werkzeug==3.0.3
 WTForms==3.1.2
-psycopg2-binary
 gunicorn
+# psycopg2==2.9.3
+# SQLAlchemy==1.4.27
+SQLAlchemy==2.0.30
+psycopg2-binary==2.9.3
