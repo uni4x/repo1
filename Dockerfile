@@ -26,6 +26,9 @@ COPY . .
 # wait-for-it.shスクリプトをコンテナにコピー
 COPY wait-for-it.sh /wait-for-it.sh
 
+# initialize_db.pyに実行権限を付与 (必要に応じて)
+RUN chmod +x initialize_db.py
+
 # コンテナの起動コマンド
 # アプリケーションのエントリーポイントを指定
 CMD ["/wait-for-it.sh", "db:5432", "--timeout=60", "--", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
