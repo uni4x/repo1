@@ -9,6 +9,7 @@ click==8.1.7
 distlib==0.3.8
 dnspython==2.6.1
 email_validator==2.1.1
+exceptiongroup==1.2.1
 filelock==3.14.0
 flake8==7.0.0
 Flask==3.0.3
@@ -18,8 +19,10 @@ Flask-SQLAlchemy==3.1.1
 Flask-Testing==0.8.1
 Flask-WTF==1.2.1
 greenlet==3.0.3
+gunicorn==22.0.0
 identify==2.5.36
 idna==3.7
+importlib_metadata==7.1.0
 iniconfig==2.0.0
 isort==5.13.2
 itsdangerous==2.2.0
@@ -36,6 +39,7 @@ pillow==10.3.0
 platformdirs==4.2.2
 pluggy==1.5.0
 pre-commit==3.7.1
+psycopg2-binary==2.9.3
 pycodestyle==2.11.1
 pyflakes==3.2.0
 pytest==8.2.1
@@ -43,14 +47,12 @@ python-dotenv==1.0.1
 PyYAML==6.0.1
 reportlab==4.2.0
 requests==2.32.2
-setuptools==70.0.0
+SQLAlchemy==2.0.30
+tomli==2.0.1
 typing_extensions==4.11.0
 urllib3==2.2.1
 virtualenv==20.26.2
 Werkzeug==3.0.3
 WTForms==3.1.2
-gunicorn
-# psycopg2==2.9.3
-# SQLAlchemy==1.4.27
-SQLAlchemy==2.0.30
-psycopg2-binary==2.9.3
+zipp==3.19.1
+setuptools==70.0.0

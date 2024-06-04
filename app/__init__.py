@@ -52,7 +52,7 @@ def create_app(config_name='default'):
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint, url_prefix='/main')
-    # app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint, name='main_root')
 
     from .customer import customer as customer_blueprint
     app.register_blueprint(customer_blueprint, url_prefix='/customer')

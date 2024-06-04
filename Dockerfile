@@ -27,7 +27,10 @@ COPY . .
 COPY wait-for-it.sh /wait-for-it.sh
 
 # initialize_db.pyに実行権限を付与 (必要に応じて)
-RUN chmod +x initialize_db.py
+# RUN chmod +x initialize_db.py
+
+# Add migration commands
+# RUN flask db upgrade
 
 # コンテナの起動コマンド
 # アプリケーションのエントリーポイントを指定
