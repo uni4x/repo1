@@ -1,15 +1,15 @@
 # app/room/routes.py
 
 from flask import render_template, request, redirect, url_for, jsonify, flash
-from . import room # Blueprintをインポート
+from . import room
 from .forms import RoomForm
 from app import db
 from ..models import Room, RoomType
 from sqlalchemy.exc import IntegrityError
 
-# @room.route デコレータを使って、Blueprintに対してルートを定義
+
 @room.route('/rooms', defaults={'id': None}, methods=['GET', 'POST'])
-@room.route('/rooms/<int:id>', methods=['GET', 'POST']) # Blueprintを使用してビュー関数を定義
+@room.route('/rooms/<int:id>', methods=['GET', 'POST'])
 def rooms(id):
     if id:
         room = Room.query.get_or_404(id)
@@ -62,7 +62,6 @@ def rooms(id):
     search_status = request.args.get('search_status')
     if search_status:
         query = query.filter(Room.status == search_status)
-        # query = query.filter(Room.status.contains(search_status))
 
     sort_order = request.args.get('sort_order', 'asc')
     if sort_order == 'asc':

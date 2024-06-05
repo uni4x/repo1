@@ -29,6 +29,24 @@ header {
     color: #ffffff;
 }
 
+/* ヘッダーのホテルロゴ */
+.header_link {
+    color: #fff;
+    text-decoration: none;
+}
+
+.header_link:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #5a5a5a;
+}
+
+.header_link a {
+    color: #fff;
+    text-decoration: none;
+}
+/* ヘッダーのホテルロゴ */
+
 .logo {
     font-size: 24px;
     font-weight: bold;

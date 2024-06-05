@@ -22,9 +22,8 @@ migrate = Migrate()
 login_manager = LoginManager()
 
 def create_app(config_name='default'):
-    app = Flask(__name__)  # インスタンス作成
+    app = Flask(__name__)
 
-    # 環境変数FLASK_CONFIGから設定を読み込み
     config_name = config_name or os.getenv('FLASK_CONFIG') or 'default'
     app.config.from_object(config[config_name])
 
