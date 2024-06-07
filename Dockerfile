@@ -30,7 +30,7 @@ COPY wait-for-it.sh /wait-for-it.sh
 # RUN chmod +x initialize_db.py
 
 # create_admin.pyを実行(必要に応じて)
-RUN python create_admin.py
+# RUN python create_admin.py
 
 # Add migration commands
 # RUN flask db upgrade
