@@ -1,6 +1,7 @@
 # app/room/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask import render_template, request, redirect, url_for, jsonify, flash, session
+from flask_login import login_required, current_user
 from . import room
 from .forms import RoomForm
 from app import db
@@ -10,6 +11,7 @@ from sqlalchemy.exc import IntegrityError
 
 @room.route('/rooms', defaults={'id': None}, methods=['GET', 'POST'])
 @room.route('/rooms/<int:id>', methods=['GET', 'POST'])
+@login_required
 def rooms(id):
     if id:
         room = Room.query.get_or_404(id)

@@ -21,7 +21,7 @@ def login():
         flash('ユーザー名またはパスワードが違います', 'error')
     return render_template('login.html', form=form)
 
-@auth.route('/logout')
+@auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
     # ログアウト時にセッションから役割を削除

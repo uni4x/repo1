@@ -10,46 +10,37 @@
 <body>
     <header>
         <h1>管理画面</h1>
-        <form action="{{ url_for('auth.login') }}" method="POST">
+        <form action="{{ url_for('auth.logout') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="logout-button">ログアウト</button>
         </form>
     </header>
+
     <!-- タブのボタン -->
     <div class="tab-buttons">
+        <button onclick="openTab('reservation', this)" class="active">予約管理</button>
+        <button onclick="openTab('customer', this)">顧客管理</button>
+        <button onclick="openTab('room', this)">部屋管理</button>
+        <button onclick="openTab('roomType', this)">部屋タイプ管理</button>
         {% if role == 'admin' %}
-        <button onclick="openTab('reservation', this)" class="active">予約管理</button>
-        <button onclick="openTab('customer', this)" class="active">顧客管理</button>
-        <button onclick="openTab('room', this)" class="active">部屋管理</button>
-        <button onclick="openTab('roomType', this)" class="active">部屋タイプ管理</button>
         <button onclick="openTab('employee', this)">従業員管理</button>
-        {% elif role == 'employee' %}
-        <button onclick="openTab('reservation', this)" class="active">予約管理</button>
-        <button onclick="openTab('customer', this)" class="active">顧客管理</button>
-        <button onclick="openTab('room', this)" class="active">部屋管理</button>
-        <button onclick="openTab('roomType', this)" class="active">部屋タイプ管理</button>
         {% endif %}
     </div>
-    
+
     <!-- 各タブのコンテンツ -->
+    <iframe id="reservation" class="tab-content active" src="{{ url_for('reservation.reservations') }}"></iframe>
+    <iframe id="customer" class="tab-content" src="{{ url_for('customer.customers') }}"></iframe>
+    <iframe id="room" class="tab-content" src="{{ url_for('room.rooms') }}"></iframe>
+    <iframe id="roomType" class="tab-content" src="{{ url_for('roomtype.room_types') }}"></iframe>
     {% if role == 'admin' %}
-        <iframe id="reservation" class="tab-content active" src="{{ url_for('reservation.reservations') }}"></iframe>
-        <iframe id="customer" class="tab-content" src="{{ url_for('customer.customers') }}"></iframe>
-        <iframe id="room" class="tab-content" src="{{ url_for('room.rooms') }}"></iframe>
-        <iframe id="roomType" class="tab-content" src="{{ url_for('roomtype.room_types') }}"></iframe>
-        <iframe id="employee" class="tab-content" src="{{ url_for('employee.employees') }}"></iframe>
-        {% elif role == 'employee' %}
-        <iframe id="reservation" class="tab-content active" src="{{ url_for('reservation.reservations') }}"></iframe>
-        <iframe id="customer" class="tab-content" src="{{ url_for('customer.customers') }}"></iframe>
-        <iframe id="room" class="tab-content" src="{{ url_for('room.rooms') }}"></iframe>
-        <iframe id="roomType" class="tab-content" src="{{ url_for('roomtype.room_types') }}"></iframe>
+    <iframe id="employee" class="tab-content" src="{{ url_for('employee.employees') }}"></iframe>
     {% endif %}
 
     <script>
         function openTab(tabId, element) {
             var tabs = document.getElementsByClassName('tab-content');
             var buttons = document.getElementsByClassName('tab-buttons')[0].getElementsByTagName('button');
-            
+
             // タブコンテンツを非表示にする
             for (var i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove('active');

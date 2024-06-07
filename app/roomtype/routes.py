@@ -1,6 +1,7 @@
 # app/roomtype/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask import render_template, request, redirect, url_for, jsonify, flash, session
+from flask_login import login_required, current_user
 from . import roomtype
 from .forms import RoomTypeForm
 from app import db
@@ -10,6 +11,7 @@ from ..models import Room, RoomType, Reservation
 # 新規登録、一覧、編集
 @roomtype.route('/room_types', defaults={'id': None}, methods=['GET', 'POST'])
 @roomtype.route('/room_types/<int:id>', methods=['GET', 'POST'])
+@login_required
 def room_types(id):
     # idがある場合は編集、ない場合は新規登録
     if id:

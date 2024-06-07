@@ -1,6 +1,7 @@
 # app/reservation/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask import render_template, request, redirect, url_for, jsonify, flash, session
+from flask_login import login_required, current_user
 from . import reservation
 from .forms import ReservationForm
 from app import db
@@ -9,6 +10,7 @@ from datetime import datetime
 
 @reservation.route('/reservations', defaults={'id': None}, methods=['GET', 'POST'])
 @reservation.route('/reservations/<int:id>', methods=['GET', 'POST'])
+@login_required
 def reservations(id):
     if id:
         reservation = Reservation.query.get_or_404(id)

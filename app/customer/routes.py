@@ -1,6 +1,7 @@
 # app/customer/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask import render_template, request, redirect, url_for, jsonify, flash, session
+from flask_login import login_required, current_user
 from . import customer
 from .forms import CustomerForm
 from app import db
@@ -10,6 +11,7 @@ from datetime import datetime
 
 @customer.route('/customers', defaults={'id': None}, methods=['GET', 'POST'])
 @customer.route('/customers/<int:id>', methods=['GET', 'POST'])
+@login_required
 def customers(id):
     if id:
         customer = Customer.query.get_or_404(id)

@@ -1,18 +1,20 @@
 # app/employee/routes.py
 
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, session
+from flask_login import login_required, current_user
 from .forms import RegisterForm, EmployeeForm
 from ..models import Employee
 from app import db
 from . import employee
-from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from datetime import datetime
+from app.decorators import admin_required
 
 # 既存の従業員管理ルート
 @employee.route('/employees', defaults={'id': None}, methods=['GET', 'POST'])
 @employee.route('/employees/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def employees(id):
     if not current_user.is_admin:
         flash('管理者のみアクセス可能です。')
