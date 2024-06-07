@@ -85,6 +85,7 @@ def create_app(config_name='default'):
 
     return app
 
+
 @login_manager.user_loader
 def load_user(user_id):
     from .models import Employee
