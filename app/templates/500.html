@@ -10,7 +10,8 @@
     {% if error %}
         <p>{{ error }}</p>
     {% else %}
-        <p>Something went wrong.</p>
+        <p>500 エラー</p>
+        <a href="{{ url_for('main.search') }}">ホームに戻る</a>
     {% endif %}
 </body>
 </html>

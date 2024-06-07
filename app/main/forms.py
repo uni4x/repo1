@@ -14,7 +14,7 @@ class ReservationForm(FlaskForm):
 class CustomerInfoForm(FlaskForm):
     name = StringField('お名前', validators=[DataRequired(message="名前は必須項目です。")])
     address = StringField('ご住所', validators=[DataRequired(message="住所は必須項目です。")])
-    phone = StringField('お電話番号', validators=[
+    phone = StringField('お電話番号（ハイフンなし、半角数字でご入力ください）', validators=[
         DataRequired(message="電話番号は必須項目です。"),
         Regexp(r'^\d{8,12}$', message="電話番号は8桁以上12桁以下の数字（ハイフンなし）で入力してください。")
     ])
