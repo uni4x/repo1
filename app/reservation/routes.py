@@ -1,12 +1,15 @@
 # app/reservation/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash, session
-from flask_login import login_required, current_user
+from datetime import datetime
+
+from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+
+from app import db
+
+from ..models import Customer, Reservation, Room
 from . import reservation
 from .forms import ReservationForm
-from app import db
-from ..models import Reservation, Customer, Room
-from datetime import datetime
 
 
 @reservation.route("/reservations", defaults={"id": None}, methods=["GET", "POST"])

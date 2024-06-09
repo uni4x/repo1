@@ -1,12 +1,14 @@
 # app/models.py
 
-from app import db
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-import sys
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
+import sys
+from datetime import datetime
+
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from app import db
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))
 

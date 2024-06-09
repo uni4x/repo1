@@ -1,10 +1,13 @@
 # app/main/routes/search.py
 
-from flask import Blueprint, render_template, request, flash
-from ..forms import SearchForm
-from ...models import Room, Reservation
-from app import db
 from datetime import datetime
+
+from flask import Blueprint, flash, render_template, request
+
+from app import db
+
+from ...models import Reservation, Room
+from ..forms import SearchForm
 
 bp = Blueprint("search", __name__)
 

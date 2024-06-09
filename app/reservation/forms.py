@@ -1,12 +1,14 @@
 # app/reservation/forms.py
 
-from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SelectField, DateField, HiddenField
-from wtforms.validators import DataRequired, Length, NumberRange, Optional
-from app.models import Customer, Room, Reservation
-from datetime import datetime
-from app import db
 import sys
+from datetime import datetime
+
+from flask_wtf import FlaskForm
+from wtforms import DateField, HiddenField, IntegerField, SelectField, StringField
+from wtforms.validators import DataRequired, Length, NumberRange, Optional
+
+from app import db
+from app.models import Customer, Reservation, Room
 
 
 class ReservationForm(FlaskForm):

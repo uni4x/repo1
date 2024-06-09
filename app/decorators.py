@@ -1,7 +1,8 @@
 # app/decorators.py
 
 from functools import wraps
-from flask import redirect, url_for, flash
+
+from flask import flash, redirect, url_for
 from flask_login import current_user
 
 

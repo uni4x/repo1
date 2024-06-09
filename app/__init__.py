@@ -1,17 +1,19 @@
 # app/__init__.py
 
-from flask import Flask, render_template, session
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import IntegrityError
-from flask_wtf.csrf import CSRFProtect, CSRFError
-from config import config
-from flask_migrate import Migrate
-from flask_login import LoginManager
-from app.error_handlers import register_error_handlers
 import logging
-from logging.handlers import RotatingFileHandler
 import os
+from logging.handlers import RotatingFileHandler
+
 from dotenv import load_dotenv
+from flask import Flask, render_template, session
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFError, CSRFProtect
+from sqlalchemy.exc import IntegrityError
+
+from app.error_handlers import register_error_handlers
+from config import config
 
 # .envファイルをロード
 load_dotenv()

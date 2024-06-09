@@ -1,7 +1,8 @@
 # app/main/routes/thank_you.py
 
 from flask import Blueprint, render_template, session
-from ...models import Room, Customer
+
+from ...models import Customer, Room
 
 bp = Blueprint("thank_you", __name__)
 

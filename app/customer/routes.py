@@ -1,13 +1,16 @@
 # app/customer/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash, session
-from flask_login import login_required, current_user
+from datetime import datetime
+
+from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError
+
+from app import db
+
+from ..models import Customer
 from . import customer
 from .forms import CustomerForm
-from app import db
-from ..models import Customer
-from sqlalchemy.exc import IntegrityError
-from datetime import datetime
 
 
 @customer.route("/customers", defaults={"id": None}, methods=["GET", "POST"])

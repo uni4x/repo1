@@ -1,8 +1,9 @@
 # hotel/create_admin.py
 
+from werkzeug.security import generate_password_hash
+
 from app import create_app, db
 from app.models import Employee
-from werkzeug.security import generate_password_hash
 
 # Flaskアプリケーションを作成
 app = create_app()

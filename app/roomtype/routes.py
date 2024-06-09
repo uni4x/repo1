@@ -1,11 +1,13 @@
 # app/roomtype/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash, session
-from flask_login import login_required, current_user
+from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+
+from app import db
+
+from ..models import Reservation, Room, RoomType
 from . import roomtype
 from .forms import RoomTypeForm
-from app import db
-from ..models import Room, RoomType, Reservation
 
 
 # 新規登録、一覧、編集

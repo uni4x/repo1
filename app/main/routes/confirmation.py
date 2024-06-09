@@ -1,9 +1,12 @@
 # app/main/routes/confirmation.py
 
-from flask import Blueprint, render_template, redirect, url_for, session, flash
-from ...models import Room, Reservation, Customer
-from app import db
 from datetime import datetime
+
+from flask import Blueprint, flash, redirect, render_template, session, url_for
+
+from app import db
+
+from ...models import Customer, Reservation, Room
 from ..forms import ConfirmationForm
 
 bp = Blueprint("confirmation", __name__, url_prefix="/confirmation")

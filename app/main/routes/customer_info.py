@@ -1,6 +1,7 @@
 # app/main/routes/customer_info.py
 
-from flask import Blueprint, render_template, redirect, url_for, session, flash
+from flask import Blueprint, flash, redirect, render_template, session, url_for
+
 from ..forms import CustomerInfoForm
 
 bp = Blueprint("customer_info", __name__, url_prefix="/customer_info")

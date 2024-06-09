@@ -1,12 +1,14 @@
 # app/room/routes.py
 
-from flask import render_template, request, redirect, url_for, jsonify, flash, session
-from flask_login import login_required, current_user
+from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError
+
+from app import db
+
+from ..models import Room, RoomType
 from . import room
 from .forms import RoomForm
-from app import db
-from ..models import Room, RoomType
-from sqlalchemy.exc import IntegrityError
 
 
 @room.route("/rooms", defaults={"id": None}, methods=["GET", "POST"])

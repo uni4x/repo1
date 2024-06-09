@@ -1,7 +1,7 @@
 # データベースを初期化
 
 from app import create_app, db
-from app.models import Employee, Customer, Reservation, Room, RoomType
+from app.models import Customer, Employee, Reservation, Room, RoomType
 
 
 def initialize_db():

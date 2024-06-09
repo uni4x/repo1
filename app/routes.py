@@ -1,11 +1,12 @@
 # app/routes.py
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
-from flask_login import login_required, current_user
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required
+
 from app import db
-from app.models import RoomType, Employee
-from app.roomtype.forms import RoomTypeForm
 from app.employee.forms import EmployeeForm
+from app.models import Employee, RoomType
+from app.roomtype.forms import RoomTypeForm
 
 admin = Blueprint("admin", __name__)
 

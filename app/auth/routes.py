@@ -1,12 +1,12 @@
 # app/auth/routes.py
 
-from flask import render_template, redirect, url_for, flash, request, session
-from .forms import LoginForm
+from flask import flash, redirect, render_template, request, session, url_for
+from flask_login import UserMixin, current_user, login_required, login_user, logout_user
+from werkzeug.security import check_password_hash
+
 from ..models import Employee
 from . import auth
-from flask_login import UserMixin, login_user, logout_user, login_required, current_user
-from werkzeug.security import check_password_hash
-from flask import render_template
+from .forms import LoginForm
 
 
 @auth.route("/login", methods=["GET", "POST"])

@@ -1,8 +1,9 @@
 # app/main/routes/__init__.py
 
 from flask import Blueprint
+
 from .. import main
-from . import search, reserve, customer_info, confirmation, thank_you, error_handlers
+from . import confirmation, customer_info, error_handlers, reserve, search, thank_you
 
 
 def register_blueprints(main_blueprint):
