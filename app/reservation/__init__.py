@@ -3,7 +3,12 @@
 from flask import Blueprint
 
 # Blueprintを定義
-reservation = Blueprint('reservation', __name__, template_folder='templates', static_folder='static', static_url_path='/reservation/static')
+reservation = Blueprint(
+    "reservation",
+    __name__,
+    template_folder="templates",
+    static_folder="static",
+    static_url_path="/reservation/static",
+)
 
 from . import routes
-

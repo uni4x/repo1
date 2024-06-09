@@ -8,7 +8,8 @@ from flask_login import UserMixin, login_user, logout_user, login_required, curr
 from werkzeug.security import check_password_hash
 from flask import render_template
 
-@auth.route('/login', methods=['GET', 'POST'])
+
+@auth.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -16,15 +17,16 @@ def login():
         if user and check_password_hash(user.password_hash, form.password.data):
             login_user(user)
             # ユーザーの役割をセッションに追加
-            session['role'] = 'admin' if user.is_admin else 'employee'
-            return redirect(url_for('admin.admin_dashboard'))  # ブループリント名を追加
-        flash('ユーザー名またはパスワードが違います', 'error')
-    return render_template('login.html', form=form)
+            session["role"] = "admin" if user.is_admin else "employee"
+            return redirect(url_for("admin.admin_dashboard"))  # ブループリント名を追加
+        flash("ユーザー名またはパスワードが違います", "error")
+    return render_template("login.html", form=form)
 
-@auth.route('/logout', methods=['POST'])
+
+@auth.route("/logout", methods=["POST"])
 @login_required
 def logout():
     # ログアウト時にセッションから役割を削除
-    session.pop('role', None)
+    session.pop("role", None)
     logout_user()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for("auth.login"))
